@@ -2,8 +2,7 @@ import sys
 import os
 
 if not os.path.exists("config.py"):
-    print("Configuration 'config.py' not found.  "
-          "You may create one from 'config.py.example'.")
+    print("Configuration 'config.py' not found.")
     exit(1)
 
 from config import OPENAPI_AUTOGEN_DIR
