@@ -8,3 +8,5 @@ htmlcov/*
 *.swp
 env/
 autogen/
+.idea/
+json/

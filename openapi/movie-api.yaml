@@ -6,142 +6,84 @@ info:
     Raw data provided by  The Internet Movie Database(IMDb) and The Movie Database(TMDB).
   version: 1.0.0
 servers:
-- url: /movie-api
+- url: /movie-api/v1
 paths:
-  /basins:
-    get:
-      summary: Returns a list of basins.
-      operationId: controller.get_basins
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BasinShort'
-  /basins/{basinId}:
-    parameters:
-      - name: basinId
+  /movies:
+      get:
+        summary: Returns a list of movies.
+        operationId: controller.get_movies #temp controller
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Movie'
+  /movies/{movieId}:
+      parameters:
+      - name: movieId
         in: path
         required: true
         schema:
           type : integer
-    get:
-      summary: Returns complete details of the specified basin
-      operationId: controller.get_basin_details
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasinFull'
-  /basins/{basinId}/stations:
-    parameters:
-      - name: basinId
+      get:
+        summary: Returns complete details of the specified movie by id
+        operationId: controller.get_movie_details_id #temp controller
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Movie'
+  /movies/{movie_title}:
+      parameters:
+      - name: movie_title
         in: path
         required: true
         schema:
-          type : integer
-    get:
-      summary: Returns a list of stations located within the specified basin.
-      operationId: controller.get_stations
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StationShort'
-  /stations/{stationId}:
-    parameters:
-      - name: stationId
-        in: path
-        required: true
-        schema:
-          type : integer
-    get:
-      summary: Returns complete details of the specified station
-      operationId: controller.get_station_details
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StationFull'
-  /basins/{basinId}/annualRainfalls/{year}:
-    parameters:
-      - name: basinId
-        in: path
-        required: true
-        schema:
-          type : integer
-      - name: year
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: Return the total rainfalls on the specified basin during the specified year
-      operationId: controller.get_basin_annual_rainfalls
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BasinAnnualRainfalls'
+          type : string
+      get:
+        summary: Returns complete details of the specified movie by movie title
+        operationId: controller.get_movie_details #temp controller
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Movie'
 
 components:
   schemas:
-    BasinShort:
+    Movie:
       type: object
       properties:
-        basinId:
-          type: integer
+        title:
+          type: string
+        budget:
+          type: number
+        revenue:
+          type: integer  
+        release_date:
+          type: string
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        production_companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductionCompany'
+    Genre:
+      type: object
+      properties:
         name:
           type: string
-    BasinFull:
+    ProductionCompany:
       type: object
       properties:
-        basinId:
-          type: integer
         name:
           type: string
-        area:
-          type: number
-          description: Total basin area in sq.km
-    StationShort:
-      type: object
-      properties:
-        stationId:
-          type: integer
-        name:
-          type: string
-    StationFull:
-      type: object
-      properties:
-        stationId:
-          type: integer
-        basinId:
-          type: integer
-        name:
-          type: string
-        lat:
-          type: number
-        lon:
-          type: number
-    BasinAnnualRainfalls:
-      type: object
-      properties:
-        basinID:
-          type: integer
-        year:
-          type: integer
-        rainfall:
-          type: number

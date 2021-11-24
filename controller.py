@@ -1,89 +1,46 @@
+from autogen.openapi_server import models
 import sys
+import requests
 from flask import abort
 import pymysql as mysql
+from requests import api
 from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
 
 sys.path.append(OPENAPI_AUTOGEN_DIR)
-from openapi_server import models
 
-db = mysql.connect(host=DB_HOST,
-                   user=DB_USER,
-                   passwd=DB_PASSWD,
-                   db=DB_NAME)
+base_url = "https://api.themoviedb.org/3/movie"
+tmdb_key = "74324e8ddeedfdab7f79715a3ed8da98"
+themoviedb_key = "b5c1777f2517bee552407c1bbcd8dbfa"
 
 
-def get_basins():
-    cs = db.cursor()
-    cs.execute("SELECT basin_id,ename FROM basin")
-    result = [models.BasinShort(basin_id, name) for basin_id, name in cs.fetchall()]
-    cs.close()
-    return result
+def db_cursor():
+    return mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, db=DB_NAME).cursor()
 
 
-def get_basin_details(basin_id):
-    cs = db.cursor()
-    cs.execute("""
-        SELECT basin_id, ename, area
-        FROM basin
-        WHERE basin_id=%s
-        """, [basin_id])
-    result = cs.fetchone()
-    cs.close()
+def get_movies():
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT *
+            FROM Movies""")
+        result = [models.Movie(*row) for row in cs.fetchall()]
     if result:
-        basin_id, name, area = result
-        return models.BasinFull(basin_id, name, area)
+        return result
     else:
         abort(404)
 
 
-def get_stations(basin_id):
-    cs = db.cursor()
-    cs.execute("""
-        SELECT station_id, s.ename
-        FROM station s
-        INNER JOIN basin b ON ST_CONTAINS(b.geometry, POINT(s.lon, s.lat))
-        WHERE basin_id=%s
-        """, [basin_id])
-    result = [models.StationShort(station_id, name) for station_id, name in cs.fetchall()]
-    cs.close()
-    return result
+def get_movie_details(movie_title):
+    return
 
-
-def get_station_details(station_id):
-    cs = db.cursor()
-    cs.execute("""
-    SELECT s.station_id, b.basin_id, s.ename, s.lat, s.lon
-    FROM rainfall r
-             INNER JOIN station s ON r.station_id = s.station_id # join rainfall and station
-             INNER JOIN basin b ON ST_Contains(b.geometry, Point(s.lon, s.lat)) # Join the geometry and lat lon
-    WHERE s.station_id = %s
-    """, [station_id])
-    result = cs.fetchone()
-    cs.close()
-    if result:
-        station_id, basin_id, ename, lat, lon = result
-        return models.StationFull(station_id, basin_id, ename, lat, lon)
-    else:
-        abort(404)
-
-def get_basin_annual_rainfalls(basin_id, year):
-    cs = db.cursor()
-    cs.execute("""
-    SELECT basin_id , year, AVG(annual_rainfall) as rainfall
-    FROM (
-    SELECT b.basin_id, r.year, SUM(r.amount) as annual_rainfall
-    FROM rainfall r
-            INNER JOIN station s ON r.station_id = s.station_id # join rainfall and station
-            INNER JOIN basin b ON ST_Contains(b.geometry, Point(s.lon, s.lat)) # Join the geometry and lat lon
-    WHERE b.basin_id=%s AND r.year=%s
-    GROUP BY r.station_id, r.year
-    )annual
-    GROUP BY year
-    """, [basin_id, year])
-    result = cs.fetchone()
-    cs.close()
-    if result:
-        basin_id, year, rainfall = result
-        return models.BasinAnnualRainfalls(basin_id, year, rainfall)
-    else:
-        abort(404)
+def get_movie_details_id(movie_id):
+    url = f"{base_url}/{movie_id}?api_key={themoviedb_key}"
+    response = requests.get(url)
+    r = {
+        "title": response.json().get('title'),
+        "budget": response.json().get('budget'),
+        "revenue": response.json().get('revenue'),
+        "release_date": response.json().get('release_date'),
+        "genres": response.json().get('genres'),
+        "production_companies": response.json().get('production_companies')
+    }
+    return r
