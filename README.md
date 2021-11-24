@@ -1,2 +1,4 @@
-# movie-project-api
-data acquisition API project
+Movie API Server
+===============
+
+Movie project for RESTful API development using OpenAPI and Python.
