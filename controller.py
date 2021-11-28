@@ -1,10 +1,9 @@
 from autogen.openapi_server import models
+from flask import abort
+from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
 import sys
 import requests
-from flask import abort
 import pymysql as mysql
-from requests import api
-from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
 
 sys.path.append(OPENAPI_AUTOGEN_DIR)
 
@@ -31,6 +30,7 @@ def get_movies():
 
 def get_movie_details(movie_title):
     return
+
 
 def get_movie_details_id(movie_id):
     url = f"{base_url}/{movie_id}?api_key={themoviedb_key}"
