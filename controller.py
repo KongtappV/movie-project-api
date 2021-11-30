@@ -28,7 +28,7 @@ def get_movies():
     else:
         abort(404)
 
-def get_movies_details_id(movie_id):
+def get_movie_details_id(movie_id):
     url = f"{base_url}/{movie_id}?api_key={themoviedb_key}"
     response = requests.get(url)
     r = {
@@ -55,7 +55,7 @@ def get_movies_latest():
         ]
         return result
 
-def get_movies_rating(movie_id):
+def get_movie_rating(movie_id):
     with db_cursor() as cs:
         cs.execute("""
             SELECT r.imdb_id, r.title, r.imDb, r.metacritic, r.theMovieDb, r.rottenTomatoes, r.tV_com, filmAffinity
