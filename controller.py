@@ -1,17 +1,10 @@
-import msilib
-
 from autogen.openapi_server import models
 from flask import abort
 from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
 import sys
-import requests
 import pymysql as mysql
 
 sys.path.append(OPENAPI_AUTOGEN_DIR)
-
-base_url = "https://api.themoviedb.org/3/movie"
-tmdb_key = "74324e8ddeedfdab7f79715a3ed8da98"
-themoviedb_key = "b5c1777f2517bee552407c1bbcd8dbfa"
 
 
 def db_cursor():
@@ -37,7 +30,7 @@ def get_movies():
             abort(404)
 
 
-def get_movies_details_id(imdb_id):
+def get_movie_details_id(imdb_id):
     with db_cursor() as cs:
         cs.execute("""
             SELECT id, imdb_id, title, release_date, cast, genres, production_companies
@@ -119,3 +112,70 @@ def get_movies_average_review():
             for movie_name, recommend, avg_score in cs.fetchall()
         ]
         return result
+
+
+def get_movies_cast(cast_id):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT id, imdb_id, title, release_date, genres, cast
+            FROM movie
+        """)
+        result = []
+        for i in cs.fetchall():
+            cast = list(eval(i[5]))
+            for c in cast:
+                if c['id'] == cast_id:
+                    genres = []
+                    j = list(eval(i[4]))
+                    for k in j:
+                        genres.append(models.Genre(k['id'], k['name']))
+                    result.append(models.MovieShort(i[0], i[1], i[2], i[3], genres))
+        if result:
+            return result
+        else:
+            abort(404)
+
+
+def get_movies_company(company_id):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT id, imdb_id, title, release_date, genres, production_companies
+            FROM movie
+        """)
+        result = []
+        for i in cs.fetchall():
+            company = list(eval(i[5]))
+            for c in company:
+                if c['id'] == company_id:
+                    genres = []
+                    j = list(eval(i[4]))
+                    for k in j:
+                        genres.append(models.Genre(k['id'], k['name']))
+                    result.append(models.MovieShort(i[0], i[1], i[2], i[3], genres))
+        if result:
+            return result
+        else:
+            abort(404)
+
+
+def get_movies_genre(genre_id):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT id, imdb_id, title, release_date, genres
+            FROM movie
+        """)
+        result = []
+        for i in cs.fetchall():
+            is_category = False
+            genres = []
+            g = list(eval(i[4]))
+            for k in g:
+                if k['id'] == genre_id:
+                    is_category = True
+                genres.append(models.Genre(k['id'], k['name']))
+            if is_category:
+                result.append(models.MovieShort(i[0], i[1], i[2], i[3], genres))
+        if result:
+            return result
+        else:
+            abort(404)

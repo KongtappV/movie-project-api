@@ -15,11 +15,7 @@ API_KEY = ["k_zwp5i4yu",
 
 
 def get_movie_rating(imdb_id):
-    response = {}
-    for i in API_KEY:
-        response = requests.get(f"{BASE_URL}/API/Ratings/{i}/{imdb_id}").json()
-        if response['errorMessage'] == "":
-            break
+    response = requests.get(f"{BASE_URL}/API/Ratings/{API_KEY[0]}/{imdb_id}").json()
     return {
         "imdb_id": imdb_id,
         "title": response['title'],
@@ -34,4 +30,4 @@ def get_movie_rating(imdb_id):
 
 
 if __name__ == '__main__':
-    print(get_movie_rating("tt0137523"))
+    print(get_movie_rating("tt1477834"))

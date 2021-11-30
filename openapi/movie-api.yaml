@@ -30,7 +30,7 @@ paths:
           type: string
     get:
       summary: Returns complete details of the specified movie by id
-      operationId: controller.get_movies_details_id
+      operationId: controller.get_movie_details_id
       responses:
         200:
           description: Success
@@ -49,23 +49,74 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MovieShort'
+  /movies/cast/{cast_id}:
+    parameters:
+      - name: cast_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Return a list of movies that cast_id star in
+      operationId: controller.get_movies_cast
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieShort'
+  /movies/company/{company_id}:
+    parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Return a list of movies that company_id contribute in
+      operationId: controller.get_movies_company
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieShort'
+  /movies/genre/{genre_id}:
+    parameters:
+      - name: genre_id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Return a list of movies with genre_id
+      operationId: controller.get_movies_genre
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieShort'
   /movie/rating/{imdb_id}:
-      parameters:
+    parameters:
       - name: imdb_id
         in: path
         required: true
         schema:
-          type : integer
-      get:
-        summary: Returns movie's rating score from various of website
-        operationId: controller.get_movie_rating
-        responses:
-          200:
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Rating'
+          type: integer
+    get:
+      summary: Returns movie's rating score from various of website
+      operationId: controller.get_movie_rating
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rating'
   /movies/AverageRating:
     get:
       summary: Returns average rating score from various of website for movies
@@ -78,16 +129,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Rating'
   /movies/AverageReview:
-        get:
-          summary: Returns average review score from our primary data
-          operationId: controller.get_movies_average_review
-          responses:
-            200:
-              description: Success
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Review'
+    get:
+      summary: Returns average review score from our primary data
+      operationId: controller.get_movies_average_review
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
 
 components:
   schemas:
