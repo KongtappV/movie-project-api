@@ -1,8 +1,7 @@
 openapi: 3.0.0
 info:
   title: Movie Review API
-  description:
-    This API provides historical review and movie data of the movies.
+  description: This API provides historical review and movie data of the movies.
     Raw data provided by  The Internet Movie Database(IMDb) and The Movie Database(TMDB).
   version: 1.0.0
 servers:
@@ -20,7 +19,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MovieShort'
+                  $ref: "#/components/schemas/MovieShort"
   /movie/{imdb_id}:
     parameters:
       - name: imdb_id
@@ -37,7 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Movie'
+                $ref: "#/components/schemas/Movie"
   /movies/latest/:
     get:
       summary: Returns list of new movies order by release date
@@ -48,52 +47,69 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieShort'
+                $ref: "#/components/schemas/MovieShort"
   /movie/rating/{imdb_id}:
-      parameters:
+    parameters:
       - name: imdb_id
         in: path
         required: true
         schema:
-          type : integer
-      get:
-        summary: Returns movie's rating score from various of website
-        operationId: controller.get_movie_rating
-        responses:
-          200:
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Rating'
-  /movies/AverageRating/{imdb_id}:
-      parameters:
-      - name: imdb_id
-        in: path
-        required: true
-        schema:
-          type : integer
+          type: string
     get:
-      summary: Returns average rating score from various of website
-      operationId: controller.get_movies_average_rating
+      summary: Returns movie's rating score from various of website
+      operationId: controller.get_movie_rating
       responses:
         200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Rating'
+                $ref: "#/components/schemas/Rating"
+  /movie/AverageRating/{imdb_id}:
+    parameters:
+      - name: imdb_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Returns average rating score from various of website
+      operationId: controller.get_movie_average_rating
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rating"
+  /movie/Review/{imdb_id}:
+    parameters:
+      - name: imdb_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Returns reviews from our primary data for specific movie
+      operationId: controller.get_movie_review
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reviews"
   /movies/AverageReview:
-        get:
-          summary: Returns average review score from our primary data
-          operationId: controller.get_movies_average_review
-          responses:
-            200:
-              description: Success
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Review'
+    get:
+      summary: Returns average review score from our primary data
+      operationId: controller.get_movies_average_review
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AverageReview"
 
 components:
   schemas:
@@ -111,7 +127,7 @@ components:
         genre:
           type: array
           items:
-            $ref: '#/components/schemas/Genre'
+            $ref: "#/components/schemas/Genre"
     Movie:
       type: object
       properties:
@@ -126,15 +142,15 @@ components:
         cast:
           type: array
           items:
-            $ref: '#/components/schemas/Person'
+            $ref: "#/components/schemas/Person"
         genres:
           type: array
           items:
-            $ref: '#/components/schemas/Genre'
+            $ref: "#/components/schemas/Genre"
         production_company:
           type: array
           items:
-            $ref: '#/components/schemas/ProductionCompany'
+            $ref: "#/components/schemas/ProductionCompany"
     Genre:
       type: object
       properties:
@@ -184,7 +200,7 @@ components:
           type: number
         film_affinity:
           type: number
-    Review:
+    AverageReview:
       type: object
       properties:
         movie_name:
@@ -195,3 +211,14 @@ components:
           type: number
         avg_score:
           type: number
+    Reviews:
+      type: object
+      properties:
+        movie_name:
+          type: string
+        recommend:
+          type: number
+        score:
+          type: number
+        review:
+          type: string

@@ -2,6 +2,7 @@ import msilib
 
 from autogen.openapi_server import models
 from flask import abort
+from autogen.openapi_server.models import review
 from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
 import sys
 import requests
@@ -58,7 +59,8 @@ def get_movies_details_id(imdb_id):
             p = list(eval(i[6]))
             for j in p:
                 company.append(models.ProductionCompany(j['id'], j['name']))
-            result.append(models.Movie(i[0], i[1], i[2], i[3], genres, cast, company))
+            result.append(models.Movie(
+                i[0], i[1], i[2], i[3], genres, cast, company))
         if result:
             return result
         else:
@@ -88,7 +90,8 @@ def get_movie_rating(imdb_id):
             WHERE r.imdb_id = %s
             """, [imdb_id])
         result = [
-            models.Rating(id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity)
+            models.Rating(id, title, imdb, metacritic, tmdb,
+                          rotten_tomatoes, tv_com, film_affinity)
             for id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity in cs.fetchall()
         ]
         return result
@@ -107,6 +110,22 @@ def get_movie_average_rating(imdb_id):
         ]
         return result
 
+
+def get_movie_review(imdb_id):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT r.movie_name, r.recommend, r.score, r.review
+            FROM review r
+            INNER JOIN movie m ON r.movie_name=m.title
+            WHERE m.imdb_id = %s
+            """, [imdb_id])
+        result = [
+            models.Reviews(movie_name, recommend, score, review)
+            for movie_name, recommend, score, review in cs.fetchall()
+        ]
+        return result
+
+
 def get_movies_average_review():
     with db_cursor() as cs:
         cs.execute("""
@@ -115,7 +134,7 @@ def get_movies_average_review():
             GROUP BY r.movie_name
             """)
         result = [
-            models.Review(movie_name, total_count, recommend, avg_score)
+            models.AverageReview(movie_name, total_count, recommend, avg_score)
             for movie_name, total_count, recommend, avg_score in cs.fetchall()
         ]
         return result
