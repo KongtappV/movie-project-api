@@ -58,7 +58,7 @@ paths:
           type : integer
       get:
         summary: Returns movie's rating score from various of website
-        operationId: controller.get_movies_rating
+        operationId: controller.get_movie_rating
         responses:
           200:
             description: Success
@@ -158,23 +158,23 @@ components:
         title:
           type: string
         imdb:
-          type: float
+          type: number
         metacritic:
-          type: float
+          type: number
         tmdb:
-          type: float
+          type: number
         rotten_tomatoes:
-          type: float
+          type: number
         tv_com:
-          type: float
+          type: number
         film_affinity:
-          type: float
+          type: number
     Review:
       type: object
       properties:
         movie_name:
           type: string
         recommend:
-          type: float
+          type: number
         avg_score:
-          type: float
+          type: number

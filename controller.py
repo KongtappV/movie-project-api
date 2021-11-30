@@ -79,6 +79,7 @@ def get_movies_latest():
         ]
         return result
 
+
 def get_movie_rating(movie_id):
     with db_cursor() as cs:
         cs.execute("""
@@ -104,6 +105,7 @@ def get_movies_average_rating():
             for id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity in cs.fetchall()
         ]
         return result
+
 
 def get_movies_average_review():
     with db_cursor() as cs:
