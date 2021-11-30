@@ -11,7 +11,7 @@ paths:
   /movies:
       get:
         summary: Returns a list of movies.
-        operationId: controller.get_movies #temp controller
+        operationId: controller.get_movies
         responses:
           200:
             description: Success
@@ -20,7 +20,7 @@ paths:
                 schema:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Movie'
+                    $ref: '#/components/schemas/MovieShort'
   /movies/{movieId}:
       parameters:
       - name: movieId
@@ -30,7 +30,7 @@ paths:
           type : integer
       get:
         summary: Returns complete details of the specified movie by id
-        operationId: controller.get_movie_details_id #temp controller
+        operationId: controller.get_movies_details_id
         responses:
           200:
             description: Success
@@ -38,26 +38,44 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Movie'
-  /movies/{movie_title}:
-      parameters:
-      - name: movie_title
-        in: path
-        required: true
-        schema:
-          type : string
+  /movies/latest/:
       get:
-        summary: Returns complete details of the specified movie by movie title
-        operationId: controller.get_movie_details #temp controller
+        summary: Returns list of movies order by release date
+        operationId: controller.get_movies_latest
         responses:
           200:
             description: Success
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Movie'
+                  $ref: '#/components/schemas/MovieShort'
+  /movies/AverageRating:
+        get:
+          summary: Returns complete details of the specified movie by movie title
+          operationId: controller.get_movies_average_rating
+          responses:
+            200:
+              description: Success
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Movie'
 
 components:
   schemas:
+    MovieShort:
+      type: object
+      properties:
+        id: 
+          type: integer
+        title: 
+          type: string
+        release_date:
+          type: string
+        genre:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
     Movie:
       type: object
       properties:
