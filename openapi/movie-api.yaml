@@ -20,7 +20,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MovieShort'
+                  $ref: "#/components/schemas/MovieShort"
   /movie/{imdb_id}:
     parameters:
       - name: imdb_id
@@ -37,7 +37,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Movie'
+                $ref: "#/components/schemas/Movie"
   /movies/latest/:
     get:
       summary: Returns list of new movies order by release date
@@ -99,14 +99,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieShort'
+                $ref: "#/components/schemas/MovieShort"
   /movie/rating/{imdb_id}:
     parameters:
       - name: imdb_id
         in: path
         required: true
         schema:
-          type: integer
+          type: string
     get:
       summary: Returns movie's rating score from various of website
       operationId: controller.get_movie_rating
@@ -116,18 +116,41 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Rating'
-  /movies/AverageRating:
+                $ref: "#/components/schemas/Rating"
+  /movie/AverageRating/{imdb_id}:
+    parameters:
+      - name: imdb_id
+        in: path
+        required: true
+        schema:
+          type: string
     get:
-      summary: Returns average rating score from various of website for movies
-      operationId: controller.get_movies_average_rating
+      summary: Returns average rating score from various of website
+      operationId: controller.get_movie_average_rating
       responses:
         200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Rating'
+                $ref: "#/components/schemas/Rating"
+  /movie/Review/{imdb_id}:
+    parameters:
+      - name: imdb_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Returns reviews from our primary data for specific movie
+      operationId: controller.get_movie_review
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reviews"
   /movies/AverageReview:
     get:
       summary: Returns average review score from our primary data
@@ -138,7 +161,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
+                $ref: "#/components/schemas/AverageReview"
 
 components:
   schemas:
@@ -156,7 +179,7 @@ components:
         genre:
           type: array
           items:
-            $ref: '#/components/schemas/Genre'
+            $ref: "#/components/schemas/Genre"
     Movie:
       type: object
       properties:
@@ -171,15 +194,15 @@ components:
         cast:
           type: array
           items:
-            $ref: '#/components/schemas/Person'
+            $ref: "#/components/schemas/Person"
         genres:
           type: array
           items:
-            $ref: '#/components/schemas/Genre'
+            $ref: "#/components/schemas/Genre"
         production_company:
           type: array
           items:
-            $ref: '#/components/schemas/ProductionCompany'
+            $ref: "#/components/schemas/ProductionCompany"
     Genre:
       type: object
       properties:
@@ -201,6 +224,15 @@ components:
           type: integer
         name:
           type: string
+    AverageRating:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        average_rating:
+          type: number
     Rating:
       type: object
       properties:
@@ -220,12 +252,25 @@ components:
           type: number
         film_affinity:
           type: number
-    Review:
+    AverageReview:
+      type: object
+      properties:
+        movie_name:
+          type: string
+        total_count:
+          type: integer
+        recommend:
+          type: number
+        avg_score:
+          type: number
+    Reviews:
       type: object
       properties:
         movie_name:
           type: string
         recommend:
           type: number
-        avg_score:
+        score:
           type: number
+        review:
+          type: string

@@ -1,5 +1,6 @@
 from autogen.openapi_server import models
 from flask import abort
+from autogen.openapi_server.models import review
 from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
 import sys
 import pymysql as mysql
@@ -51,7 +52,8 @@ def get_movie_details_id(imdb_id):
             p = list(eval(i[6]))
             for j in p:
                 company.append(models.ProductionCompany(j['id'], j['name']))
-            result.append(models.Movie(i[0], i[1], i[2], i[3], genres, cast, company))
+            result.append(models.Movie(
+                i[0], i[1], i[2], i[3], genres, cast, company))
         if result:
             return result
         else:
@@ -73,29 +75,46 @@ def get_movies_latest():
         return result
 
 
-def get_movie_rating(movie_id):
+def get_movie_rating(imdb_id):
     with db_cursor() as cs:
         cs.execute("""
             SELECT r.imdb_id, r.title, r.imDb, r.metacritic, r.theMovieDb, r.rottenTomatoes, r.tV_com, filmAffinity
             FROM rating r
             WHERE r.imdb_id = %s
-            """, [movie_id])
+            """, [imdb_id])
         result = [
-            models.Rating(id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity)
+            models.Rating(id, title, imdb, metacritic, tmdb,
+                          rotten_tomatoes, tv_com, film_affinity)
             for id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity in cs.fetchall()
         ]
         return result
 
 
-def get_movies_average_rating():
+def get_movie_average_rating(imdb_id):
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.imdb_id, r.title, r.imDb, r.metacritic, r.theMovieDb, r.rottenTomatoes, r.tV_com, filmAffinity
+            SELECT r.imdb_id, r.title, AVG(r.imdb) as average_rating
             FROM rating r
-            """)
+            WHERE r.imdb_id = %s
+            """, [imdb_id])
         result = [
-            models.Rating(id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity)
-            for id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity in cs.fetchall()
+            models.AverageRating(id, title, average_rating)
+            for id, title, average_rating in cs.fetchall()
+        ]
+        return result
+
+
+def get_movie_review(imdb_id):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT r.movie_name, r.recommend, r.score, r.review
+            FROM review r
+            INNER JOIN movie m ON r.movie_name=m.title
+            WHERE m.imdb_id = %s
+            """, [imdb_id])
+        result = [
+            models.Reviews(movie_name, recommend, score, review)
+            for movie_name, recommend, score, review in cs.fetchall()
         ]
         return result
 
@@ -103,13 +122,13 @@ def get_movies_average_rating():
 def get_movies_average_review():
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.movie_name, (SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score 
+            SELECT r.movie_name, COUNT(r.recommend) as total_count,(SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score
             FROM review r 
             GROUP BY r.movie_name
             """)
         result = [
-            models.Review(movie_name, recommend, avg_score)
-            for movie_name, recommend, avg_score in cs.fetchall()
+            models.AverageReview(movie_name, total_count, recommend, avg_score)
+            for movie_name, total_count, recommend, avg_score in cs.fetchall()
         ]
         return result
 
