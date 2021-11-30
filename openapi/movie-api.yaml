@@ -21,7 +21,7 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/MovieShort'
-  /movies/{movieId}:
+  /movie/{movieId}:
       parameters:
       - name: movieId
         in: path
@@ -40,7 +40,7 @@ paths:
                   $ref: '#/components/schemas/Movie'
   /movies/latest/:
       get:
-        summary: Returns list of movies order by release date
+        summary: Returns list of new movies order by release date
         operationId: controller.get_movies_latest
         responses:
           200:
@@ -49,9 +49,26 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/MovieShort'
+  /movie/rating/{imdb_id}:
+      parameters:
+      - name: imdb_id
+        in: path
+        required: true
+        schema:
+          type : integer
+      get:
+        summary: Returns movie's rating score from various of website
+        operationId: controller.get_movies_rating
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Rating'
   /movies/AverageRating:
         get:
-          summary: Returns complete details of the specified movie by movie title
+          summary: Returns average rating score from various of website for movies
           operationId: controller.get_movies_average_rating
           responses:
             200:
@@ -59,7 +76,18 @@ paths:
               content:
                 application/json:
                   schema:
-                    $ref: '#/components/schemas/Movie'
+                    $ref: '#/components/schemas/Rating'
+  /movies/AverageReview:
+        get:
+          summary: Returns average review score from our primary data
+          operationId: controller.get_movies_average_review
+          responses:
+            200:
+              description: Success
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Review'
 
 components:
   schemas:
@@ -105,3 +133,31 @@ components:
       properties:
         name:
           type: string
+    Rating:
+      type: object
+      properties:
+        id: 
+          type: integer
+        title: 
+          type: string
+        imdb:
+          type: float
+        metacritic:
+          type: float
+        tmdb:
+          type: float
+        rotten_tomatoes:
+          type: float
+        tv_com:
+          type: float
+        film_affinity:
+          type: float
+    Review:
+      type: object
+      properties:
+        movie_name: 
+          type: string
+        recommend:
+          type: float
+        avg_score:
+          type: float
