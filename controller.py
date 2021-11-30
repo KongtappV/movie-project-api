@@ -17,7 +17,7 @@ def db_cursor():
     return mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, db=DB_NAME).cursor()
 
 
-def get_movie():
+def get_movies():
     with db_cursor() as cs:
         cs.execute("""
             SELECT m.id, m.title, m.release_date, m.genre
@@ -29,7 +29,7 @@ def get_movie():
     else:
         abort(404)
 
-def get_movie_details_id(movie_id):
+def get_movies_details_id(movie_id):
     url = f"{base_url}/{movie_id}?api_key={themoviedb_key}"
     response = requests.get(url)
     r = {
@@ -42,7 +42,7 @@ def get_movie_details_id(movie_id):
     }
     return r
 
-def get_movie_latest():
+def get_movies_latest():
     with db_cursor() as cs:
         cs.execute("""
             SELECT m.id, m.title, m.release_date, m.genre
@@ -56,5 +56,5 @@ def get_movie_latest():
         ]
         return result
 
-def get_movie_average_rating():
+def get_movies_average_rating():
     return

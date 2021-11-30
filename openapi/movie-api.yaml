@@ -11,7 +11,7 @@ paths:
   /movies:
       get:
         summary: Returns a list of movies.
-        operationId: controller.get_movie
+        operationId: controller.get_movies
         responses:
           200:
             description: Success
@@ -30,7 +30,7 @@ paths:
           type : integer
       get:
         summary: Returns complete details of the specified movie by id
-        operationId: controller.get_movie_details_id
+        operationId: controller.get_movies_details_id
         responses:
           200:
             description: Success
@@ -41,7 +41,7 @@ paths:
   /movies/latest/:
       get:
         summary: Returns list of movies order by release date
-        operationId: controller.get_movie_latest
+        operationId: controller.get_movies_latest
         responses:
           200:
             description: Success
@@ -52,7 +52,7 @@ paths:
   /movies/AverageRating:
         get:
           summary: Returns complete details of the specified movie by movie title
-          operationId: controller.get_movie_average_rating
+          operationId: controller.get_movies_average_rating
           responses:
             200:
               description: Success
