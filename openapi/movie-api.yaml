@@ -66,9 +66,15 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Rating'
-  /movies/AverageRating:
+  /movies/AverageRating/{imdb_id}:
+      parameters:
+      - name: imdb_id
+        in: path
+        required: true
+        schema:
+          type : integer
     get:
-      summary: Returns average rating score from various of website for movies
+      summary: Returns average rating score from various of website
       operationId: controller.get_movies_average_rating
       responses:
         200:
@@ -150,6 +156,15 @@ components:
           type: integer
         name:
           type: string
+    AverageRating:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        average_rating:
+          type: number
     Rating:
       type: object
       properties:
@@ -174,6 +189,8 @@ components:
       properties:
         movie_name:
           type: string
+        total_count:
+          type: integer
         recommend:
           type: number
         avg_score:
