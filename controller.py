@@ -1,3 +1,5 @@
+import msilib
+
 from autogen.openapi_server import models
 from flask import abort
 from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
@@ -19,27 +21,49 @@ def db_cursor():
 def get_movies():
     with db_cursor() as cs:
         cs.execute("""
-            SELECT m.id, m.title, m.release_date, m.genres
-            FROM movie m
+            SELECT id, imdb_id, title, release_date, genres
+            FROM movie
             """)
-        result = [models.MovieShort(*row) for row in cs.fetchall()]
-    if result:
-        return result
-    else:
-        abort(404)
+        result = []
+        for i in cs.fetchall():
+            genres = []
+            j = list(eval(i[4]))
+            for k in j:
+                genres.append(models.Genre(k['id'], k['name']))
+            result.append(models.MovieShort(i[0], i[1], i[2], i[3], genres))
+        if result:
+            return result
+        else:
+            abort(404)
 
-def get_movie_details_id(movie_id):
-    url = f"{base_url}/{movie_id}?api_key={themoviedb_key}"
-    response = requests.get(url)
-    r = {
-        "title": response.json().get('title'),
-        "budget": response.json().get('budget'),
-        "revenue": response.json().get('revenue'),
-        "release_date": response.json().get('release_date'),
-        "genres": response.json().get('genres'),
-        "production_companies": response.json().get('production_companies')
-    }
-    return r
+
+def get_movies_details_id(imdb_id):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT id, imdb_id, title, release_date, cast, genres, production_companies
+            FROM movie 
+            WHERE imdb_id=%s
+            """, [imdb_id])
+        result = []
+        for i in cs.fetchall():
+            genres = []
+            g = list(eval(i[4]))
+            for j in g:
+                genres.append(models.Genre(j['id'], j['name']))
+            cast = []
+            c = list(eval(i[5]))
+            for j in c:
+                cast.append(models.Person(j['id'], j['name']))
+            company = []
+            p = list(eval(i[6]))
+            for j in p:
+                company.append(models.ProductionCompany(j['id'], j['name']))
+            result.append(models.Movie(i[0], i[1], i[2], i[3], genres, cast, company))
+        if result:
+            return result
+        else:
+            abort(404)
+
 
 def get_movies_latest():
     with db_cursor() as cs:
@@ -67,6 +91,7 @@ def get_movie_rating(movie_id):
             for id, title, imdb, metacritic, tmdb, rotten_tomatoes, tv_com, film_affinity in cs.fetchall()
         ]
         return result
+
 
 def get_movies_average_rating():
     with db_cursor() as cs:
