@@ -32,19 +32,19 @@ def get_movies_by_year(y):
                 movie = {
                     "id": int(detail["id"]),
                     "title": detail["title"],
-                    "genres": {"genre": detail["genres"]},
+                    "genres": detail["genres"],
                     "release_date": detail["release_date"],
                     "imdb_id": detail["imdb_id"],
-                    "cast": {"cast": cast["cast"]},
-                    "production_companies": {"production_company": detail["production_companies"]}
+                    "cast": cast["cast"],
+                    "production_companies": detail["production_companies"]
                 }
                 movies.append(movie)
                 dict_writer.writerow(movie)
 
-                for c in cast["cast"]:
+                for ca in cast["cast"]:
                     persons.append({
-                        "id": int(c["id"]),
-                        "name": c["name"]
+                        "id": int(ca["id"]),
+                        "name": ca["name"]
                     })
 
                 for k in detail["production_companies"]:
