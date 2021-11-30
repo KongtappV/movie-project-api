@@ -6,69 +6,71 @@ info:
     Raw data provided by  The Internet Movie Database(IMDb) and The Movie Database(TMDB).
   version: 1.0.0
 servers:
-- url: /movie-api/v1
+  - url: /movie-api/v1
 paths:
   /movies:
-      get:
-        summary: Returns a list of movies.
-        operationId: controller.get_movies
-        responses:
-          200:
-            description: Success
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/MovieShort'
-  /movies/{movieId}:
-      parameters:
-      - name: movieId
+    get:
+      summary: Returns a list of movies.
+      operationId: controller.get_movies
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieShort'
+  /movie/{imdb_id}:
+    parameters:
+      - name: imdb_id
         in: path
         required: true
         schema:
-          type : integer
-      get:
-        summary: Returns complete details of the specified movie by id
-        operationId: controller.get_movies_details_id
-        responses:
-          200:
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Movie'
+          type: string
+    get:
+      summary: Returns complete details of the specified movie by id
+      operationId: controller.get_movies_details_id
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
   /movies/latest/:
-      get:
-        summary: Returns list of movies order by release date
-        operationId: controller.get_movies_latest
-        responses:
-          200:
-            description: Success
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/MovieShort'
+    get:
+      summary: Returns list of movies order by release date
+      operationId: controller.get_movies_latest
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieShort'
   /movies/AverageRating:
-        get:
-          summary: Returns complete details of the specified movie by movie title
-          operationId: controller.get_movies_average_rating
-          responses:
-            200:
-              description: Success
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Movie'
+    get:
+      summary: Returns complete details of the specified movie by movie title
+      operationId: controller.get_movies_average_rating
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
 
 components:
   schemas:
     MovieShort:
       type: object
       properties:
-        id: 
+        id:
           type: integer
-        title: 
+        imdb_id:
+          type: string
+        title:
           type: string
         release_date:
           type: string
@@ -79,29 +81,44 @@ components:
     Movie:
       type: object
       properties:
+        id:
+          type: integer
+        imdb_id:
+          type: string
         title:
           type: string
-        budget:
-          type: number
-        revenue:
-          type: integer  
         release_date:
           type: string
+        cast:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
         genres:
           type: array
           items:
             $ref: '#/components/schemas/Genre'
-        production_companies:
+        production_company:
           type: array
           items:
             $ref: '#/components/schemas/ProductionCompany'
     Genre:
       type: object
       properties:
+        id:
+          type: integer
         name:
           type: string
     ProductionCompany:
       type: object
       properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
         name:
           type: string
