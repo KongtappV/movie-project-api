@@ -80,25 +80,29 @@
       type: 'bar',
       x: name,
       y: avgRating,
-      marker: {
-          color: '#ebcf34',
-          line: {
-              width: 1
-          }
-      }
+        marker: {
+            color: '#ebcf34',
+            line: {
+                width: 1
+            }
+        }
     }
 
-    var data = [trace0, trace1, trace2];
+      var data = [trace0, trace1, trace2];
 
-    var layout = { 
-      title: 'Average Movie Review',
-      barmode: 'group',
-      font: {size: 18}
-    };
+      var layout = {
+          yaxis: {
+              title: 'Score',
+              range: [0, 10]
+          },
+          title: 'Average Movie Review',
+          barmode: 'group',
+          font: {size: 18}
+      };
 
-    var config = {responsive: true}
+      var config = {responsive: true}
 
-    Plotly.newPlot("bar", data, layout, config );
+      Plotly.newPlot("bar", data, layout, config);
   }
 
   createChart();
