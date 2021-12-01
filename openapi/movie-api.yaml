@@ -8,7 +8,7 @@ info:
 servers:
   - url: /movie-api/v1
 paths:
-  /movies:
+  /movie:
     get:
       summary: Returns a list of movies.
       operationId: controller.get_movies
@@ -38,7 +38,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Movie"
-  /movies/latest/:
+  /movie/latest/:
     get:
       summary: Returns list of new movies order by release date
       operationId: controller.get_movies_latest
@@ -51,7 +51,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MovieShort'
-  /movies/cast/{cast_id}:
+  /movie/cast/{cast_id}:
     parameters:
       - name: cast_id
         in: path
@@ -70,7 +70,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MovieShort'
-  /movies/company/{company_id}:
+  /movie/company/{company_id}:
     parameters:
       - name: company_id
         in: path
@@ -89,7 +89,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MovieShort'
-  /movies/genre/{genre_id}:
+  /movie/genre/{genre_id}:
     parameters:
       - name: genre_id
         in: path
@@ -161,7 +161,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Reviews"
-  /movies/AverageReview:
+  /movie/AverageReview:
     get:
       summary: Returns average review score from our primary data
       operationId: controller.get_movies_average_review
@@ -174,7 +174,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AverageReview"
-  /movies/AverageReview/{imbd_id}:
+  /movie/AverageReview/{imbd_id}:
     parameters:
       - name: imbd_id
         in: path
@@ -230,7 +230,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Person"
-  /movies/{year}:
+  /movie/year/{year}:
     parameters:
       - name: year
         in: path
