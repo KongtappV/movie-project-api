@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Average Movie Review</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.6.3.min.js%27%3E"></script>
+<body>
+<div id="bar" style="width:100%;height:75vh;"></div>
+<script>
+  async function createChart() {
+    var resp = await fetch('http://localhost:3000/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `{
+                  movieAverageReviewLimit(limit: 10) {
+                    avgScore
+                    movieName
+                    recommend
+                    totalCount
+                  }
+                }`
+      })
+    });
+    var json = await resp.json();
+    var table = json.data.movieAverageReviewLimit;
+    var name = [];
+    var avgScore = [];
+    var avgRecommend = [];
+
+    for (const movie of table) {
+      name.push(movie.movieName);
+      avgScore.push(movie.avgScore);
+      avgRecommend.push(movie.recommend/10);
+    }
+
+    var trace0 = {
+          name: "average score",
+          type: 'bar',
+          x: name,
+          y: avgScore,
+          marker: {
+              color: '#3477eb',
+              line: {
+                  width: 1
+              }
+          }
+        }
+
+    var trace1 = {
+      name: "recommend",
+      type: 'bar',
+      x: name,
+      y: avgRecommend,
+      marker: {
+          color: '#ebcf34',
+          line: {
+              width: 1
+          }
+      }
+    }
+
+    var data = [trace0, trace1];
+
+    var layout = { 
+      title: 'Average Movie Review',
+      barmode: 'group',
+      font: {size: 18}
+    };
+
+    var config = {responsive: true}
+
+    Plotly.newPlot("bar", data, layout, config );
+  }
+
+  createChart();
+</script>
+</body>
+</html>

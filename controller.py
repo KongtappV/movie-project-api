@@ -88,15 +88,40 @@ def get_movie_rating(imdb_id):
         return models.Rating(*cs.fetchone())
 
 
-def get_movie_average_rating(imdb_id):
+def get_movie_average_rating_id(imdb_id):
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.imdb_id, r.title, AVG(r.imdb) as average_rating
+            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic + r.theMovieDb)/3 as average_rating
             FROM rating r
             WHERE r.imdb_id = %s
             """, [imdb_id])
         return models.AverageRating(*cs.fetchone())
 
+def get_movie_average_rating():
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic + r.theMovieDb)/3 as average_rating
+            FROM rating r
+            """)
+        result = [
+            models.AverageRating(imdb_id, title, average_rating)
+            for imdb_id, title, average_rating in cs.fetchall()
+        ]
+        return result
+
+def get_movie_average_rating_limit(limit):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic + r.theMovieDb)/3 as average_rating
+            FROM rating r
+            ORDER BY average_rating
+            LIMIT %s
+            """, [limit])
+        result = [
+            models.AverageRating(imdb_id, title, average_rating)
+            for imdb_id, title, average_rating in cs.fetchall()
+        ]
+        return result
 
 def get_movie_review(imdb_id):
     with db_cursor() as cs:
@@ -116,13 +141,29 @@ def get_movie_review(imdb_id):
 def get_movies_average_review():
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.movie_name, COUNT(r.recommend) as total_count,(SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score
-            FROM review r 
+            SELECT m.imdb_id, r.movie_name, COUNT(r.recommend) as total_count,(SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score
+            FROM review r INNER JOIN movie m ON m.title = r.movie_name
             GROUP BY r.movie_name
             """)
         result = [
-            models.AverageReview(movie_name, total_count, recommend, avg_score)
-            for movie_name, total_count, recommend, avg_score in cs.fetchall()
+            models.AverageReview(imdb_id, movie_name, total_count, recommend, avg_score)
+            for imdb_id, movie_name, total_count, recommend, avg_score in cs.fetchall()
+        ]
+        return result
+
+
+def get_movies_average_review_limit(limit):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT m.imdb_id, r.movie_name, COUNT(r.recommend) as total_count,(SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score
+            FROM review r INNER JOIN movie m ON m.title = r.movie_name
+            GROUP BY r.movie_name
+            ORDER BY avg_score desc
+            LIMIT %s
+            """, [limit])
+        result = [
+            models.AverageReview(imdb_id, movie_name, total_count, recommend, avg_score)
+            for imdb_id, movie_name, total_count, recommend, avg_score in cs.fetchall()
         ]
         return result
 
@@ -130,7 +171,7 @@ def get_movies_average_review():
 def get_movies_average_review_id(imbd_id):
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.movie_name, COUNT(r.recommend) as total_count,(SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score
+            SELECT m.imdb_id, r.movie_name, COUNT(r.recommend) as total_count,(SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score
             FROM review r INNER JOIN movie m ON m.title = r.movie_name
             WHERE m.imdb_id = %s
             GROUP BY r.movie_name

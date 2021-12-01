@@ -134,7 +134,35 @@ paths:
           type: string
     get:
       summary: Returns average rating score from various of website
-      operationId: controller.get_movie_average_rating
+      operationId: controller.get_movie_average_rating_id
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AverageRating"
+  /movie/AverageRating:
+      get:
+        summary: Returns average rating score from various of website
+        operationId: controller.get_movie_average_rating
+        responses:
+          200:
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/AverageRating"
+  /movie/AverageRating/limit/{limit}:
+    parameters:
+      - name: limit
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Returns average rating score from various of website
+      operationId: controller.get_movie_average_rating_limit
       responses:
         200:
           description: Success
@@ -165,6 +193,25 @@ paths:
     get:
       summary: Returns average review score from our primary data
       operationId: controller.get_movies_average_review
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AverageReview"
+  /movie/AverageReview/limit/{limit}:
+    parameters:
+      - name: limit
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Returns average review score from our primary data
+      operationId: controller.get_movies_average_review_limit
       responses:
         200:
           description: Success
@@ -336,6 +383,8 @@ components:
     AverageReview:
       type: object
       properties:
+        imdb_id:
+          type: string
         movie_name:
           type: string
         total_count:
