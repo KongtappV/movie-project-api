@@ -17,32 +17,43 @@
       },
       body: JSON.stringify({
         query: `{
-                  movieAverageReviewLimit(limit: 10) {
+                  review: movieAverageReviewLimit(limit: 10) {
                     avgScore
                     movieName
                     recommend
                     totalCount
                   }
+                  rating: movieAverageRatingLimit(limit: 10) {
+                    averageRating
+                    imdbId
+                    title
+                  }
                 }`
       })
     });
     var json = await resp.json();
-    var table = json.data.movieAverageReviewLimit;
+    var table1 = json.data.review;
+    var table2 = json.data.rating;
     var name = [];
-    var avgScore = [];
+    var avgReview = [];
     var avgRecommend = [];
+    var avgRating = [];
 
-    for (const movie of table) {
+    for (const movie of table1) {
       name.push(movie.movieName);
-      avgScore.push(movie.avgScore);
+      avgReview.push(movie.avgScore);
       avgRecommend.push(movie.recommend/10);
     }
 
+    for (const movie of table2) {
+      avgRating.push(movie.averageRating);
+    }
+
     var trace0 = {
-          name: "average score",
+          name: "average review",
           type: 'bar',
           x: name,
-          y: avgScore,
+          y: avgReview,
           marker: {
               color: '#3477eb',
               line: {
@@ -57,6 +68,19 @@
       x: name,
       y: avgRecommend,
       marker: {
+          color: '#34ebb4',
+          line: {
+              width: 1
+          }
+      }
+    }
+
+    var trace2 = {
+      name: "average rating",
+      type: 'bar',
+      x: name,
+      y: avgRating,
+      marker: {
           color: '#ebcf34',
           line: {
               width: 1
@@ -64,7 +88,7 @@
       }
     }
 
-    var data = [trace0, trace1];
+    var data = [trace0, trace1, trace2];
 
     var layout = { 
       title: 'Average Movie Review',

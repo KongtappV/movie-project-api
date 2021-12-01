@@ -112,9 +112,9 @@ def get_movie_average_rating():
 def get_movie_average_rating_limit(limit):
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic + r.theMovieDb)/3 as average_rating
+            SELECT r.imdb_id, r.title, (r.imdb + (r.metacritic/10) + r.theMovieDb)/3 as average_rating
             FROM rating r
-            ORDER BY average_rating
+            ORDER BY r.title
             LIMIT %s
             """, [limit])
         result = [
@@ -158,7 +158,7 @@ def get_movies_average_review_limit(limit):
             SELECT m.imdb_id, r.movie_name, COUNT(r.recommend) as total_count,(SUM((CASE WHEN r.recommend = "Yes" THEN 1 ELSE 0 END))/COUNT(r.recommend))*100 as recommend, AVG(r.score) as avg_score
             FROM review r INNER JOIN movie m ON m.title = r.movie_name
             GROUP BY r.movie_name
-            ORDER BY avg_score desc
+            ORDER BY r.movie_name
             LIMIT %s
             """, [limit])
         result = [

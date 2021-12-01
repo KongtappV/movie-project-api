@@ -169,7 +169,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AverageRating"
+                type: array
+                items:
+                  $ref: "#/components/schemas/AverageRating"
   /movie/Review/{imdb_id}:
     parameters:
       - name: imdb_id
