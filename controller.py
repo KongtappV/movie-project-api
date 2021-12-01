@@ -203,3 +203,48 @@ def get_movies_genre(genre_id):
             return result
         else:
             abort(404)
+
+
+def get_genres():
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT *
+            FROM genre
+        """)
+        result = []
+        for row in cs.fetchall():
+            result.append(models.Genre(row[0], row[1]))
+        if result:
+            return result
+        else:
+            abort(404)
+
+
+def get_companies():
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT *
+            FROM company
+        """)
+        result = []
+        for row in cs.fetchall():
+            result.append(models.ProductionCompany(row[0], row[1]))
+        if result:
+            return result
+        else:
+            abort(404)
+
+
+def get_persons():
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT *
+            FROM person
+        """)
+        result = []
+        for row in cs.fetchall():
+            result.append(models.Person(row[0], row[1]))
+        if result:
+            return result
+        else:
+            abort(404)
