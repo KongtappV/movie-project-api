@@ -1,6 +1,5 @@
 from autogen.openapi_server import models
 from flask import abort
-from autogen.openapi_server.models import review
 from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
 import sys
 import pymysql as mysql
@@ -63,16 +62,22 @@ def get_movie_details_id(imdb_id):
 def get_movies_latest():
     with db_cursor() as cs:
         cs.execute("""
-            SELECT m.id, m.title, m.release_date, m.genres
+            SELECT m.id, m.imdb_id, m.title, m.release_date, m.genres
             FROM movie m
             ORDER BY m.release_date desc
             LIMIT 30
             """)
-        result = [
-            models.MovieShort(id, title, release_date, genre)
-            for id, title, release_date, genre in cs.fetchall()
-        ]
-        return result
+        result = []
+        for i in cs.fetchall():
+            genres = []
+            j = list(eval(i[4]))
+            for k in j:
+                genres.append(models.Genre(k['id'], k['name']))
+            result.append(models.MovieShort(i[0], i[1], i[2], i[3], genres))
+        if result:
+            return result
+        else:
+            abort(404)
 
 
 def get_movie_rating(imdb_id):
