@@ -68,6 +68,10 @@ if __name__ == '__main__':
         for m in sorted_movies:
             my_file.writelines(f"{m['title']}\n")
 
+    with open(f'movie_imdb.csv', 'w', encoding='utf-8', newline="") as my_file:
+        for m in sorted_movies:
+            my_file.writelines(f"{m['imdb_id']}")
+
     res_list = [i for n, i in enumerate(persons) if i not in persons[n + 1:]]
     with open(f'persons.csv', 'w', encoding='utf-8', newline="") as my_file:
         writer = csv.DictWriter(my_file, ['id', 'name'])
