@@ -91,16 +91,17 @@ def get_movie_rating(imdb_id):
 def get_movie_average_rating_id(imdb_id):
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic + r.theMovieDb)/3 as average_rating
+            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic/10 + r.theMovieDb)/3 as average_rating
             FROM rating r
             WHERE r.imdb_id = %s
             """, [imdb_id])
         return models.AverageRating(*cs.fetchone())
 
+
 def get_movie_average_rating():
     with db_cursor() as cs:
         cs.execute("""
-            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic + r.theMovieDb)/3 as average_rating
+            SELECT r.imdb_id, r.title, (r.imdb + r.metacritic/10 + r.theMovieDb)/3 as average_rating
             FROM rating r
             """)
         result = [
