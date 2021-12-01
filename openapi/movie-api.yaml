@@ -314,8 +314,8 @@ components:
     AverageRating:
       type: object
       properties:
-        id:
-          type: integer
+        imdb_id:
+          type: string
         title:
           type: string
         average_rating:
@@ -323,8 +323,8 @@ components:
     Rating:
       type: object
       properties:
-        id:
-          type: integer
+        imdb_id:
+          type: string
         title:
           type: string
         imdb:
