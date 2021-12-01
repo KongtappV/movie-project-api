@@ -1,5 +1,3 @@
-import requests
-
 from autogen.openapi_server import models
 from flask import abort
 from config import OPENAPI_AUTOGEN_DIR, DB_HOST, DB_USER, DB_PASSWD, DB_NAME
