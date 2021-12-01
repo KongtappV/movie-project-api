@@ -48,7 +48,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieShort'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieShort'
   /movies/cast/{cast_id}:
     parameters:
       - name: cast_id
@@ -65,7 +67,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieShort'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieShort'
   /movies/company/{company_id}:
     parameters:
       - name: company_id
@@ -82,7 +86,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieShort'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieShort'
   /movies/genre/{genre_id}:
     parameters:
       - name: genre_id
@@ -99,7 +105,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MovieShort"
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieShort"
   /movie/rating/{imdb_id}:
     parameters:
       - name: imdb_id
@@ -150,7 +158,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Reviews"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reviews"
   /movies/AverageReview:
     get:
       summary: Returns average review score from our primary data
@@ -162,6 +172,64 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AverageReview"
+  /movie/genres:
+    get:
+      summary: Returns list of genres
+      operationId: controller.get_genres
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Genre"
+  /movie/companies:
+    get:
+      summary: Returns list of companies
+      operationId: controller.get_companies
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductionCompany"
+  /movie/casts:
+    get:
+      summary: Return list of persons
+      operationId: controller.get_persons
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Person"
+  /movies/{year}:
+    parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Return list of movie release on specific year
+      operationId: controller.get_movie_year
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieShort"
 
 components:
   schemas:
