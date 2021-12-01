@@ -17,9 +17,11 @@ Movie project for RESTful API development using OpenAPI and Python. This project
 | Pip| 21 or later| Use for installing extra extension for Python|
 ### Data Collection
 #### Primary Data
-- TBA
+- [Questionnaire provided by Google Form](https://docs.google.com/forms/d/e/1FAIpQLSeowh_YJuN-eWCO2ahBSGyoyLNL8E78wraUG2INRLrgP50RrA/viewform)
 #### Secondary data
 - [The Movie Database(TMDB)](https://www.themoviedb.org/documentation/api)
+- [Internet Movie Database](https://imdb-api.com/swagger/index.html)
+- [Metacritic API](https://www.internetvideoarchive.com/apis/metacritic-api/)
 
 #### Get started
 Before starting the process, Create a virtual environment using these command
@@ -48,4 +50,3 @@ Then type this command:
 ```
 python -m pip install -r requirements.txt
 ```
-**Others are TBA**
