@@ -11,6 +11,8 @@ paths:
   /movie:
     get:
       summary: Returns a list of movies.
+      tags:
+        - movie
       operationId: controller.get_movies
       responses:
         200:
@@ -30,6 +32,8 @@ paths:
           type: string
     get:
       summary: Returns complete details of the specified movie by id
+      tags:
+        - movie
       operationId: controller.get_movie_details_id
       responses:
         200:
@@ -41,6 +45,8 @@ paths:
   /movie/latest/:
     get:
       summary: Returns list of new movies order by release date
+      tags:
+        - movie
       operationId: controller.get_movies_latest
       responses:
         200:
@@ -51,6 +57,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MovieShort'
+  /movie/casts:
+    get:
+      summary: Return list of movie star
+      tags:
+        - person
+      operationId: controller.get_persons
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Person"
   /movie/cast/{cast_id}:
     parameters:
       - name: cast_id
@@ -60,6 +81,8 @@ paths:
           type: integer
     get:
       summary: Return a list of movies that cast_id star in
+      tags:
+        - person
       operationId: controller.get_movies_cast
       responses:
         200:
@@ -70,6 +93,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MovieShort'
+  /movie/companies:
+    get:
+      summary: Returns list of companies
+      tags:
+        - production company
+      operationId: controller.get_companies
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductionCompany"
   /movie/company/{company_id}:
     parameters:
       - name: company_id
@@ -79,6 +117,8 @@ paths:
           type: integer
     get:
       summary: Return a list of movies that company_id contribute in
+      tags:
+        - production company
       operationId: controller.get_movies_company
       responses:
         200:
@@ -89,6 +129,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MovieShort'
+  /movie/genres:
+    get:
+      summary: Returns list of genres
+      tags:
+        - genre
+      operationId: controller.get_genres
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Genre"
   /movie/genre/{genre_id}:
     parameters:
       - name: genre_id
@@ -98,6 +153,8 @@ paths:
           type: integer
     get:
       summary: Return a list of movies with genre_id
+      tags:
+        - genre
       operationId: controller.get_movies_genre
       responses:
         200:
@@ -117,6 +174,8 @@ paths:
           type: string
     get:
       summary: Returns movie's rating score from various of website
+      tags:
+        - rating
       operationId: controller.get_movie_rating
       responses:
         200:
@@ -134,6 +193,8 @@ paths:
           type: string
     get:
       summary: Returns average rating score from various of website
+      tags:
+        - rating
       operationId: controller.get_movie_average_rating_id
       responses:
         200:
@@ -145,6 +206,8 @@ paths:
   /movie/AverageRating:
       get:
         summary: Returns average rating score from various of website
+        tags:
+          - rating
         operationId: controller.get_movie_average_rating
         responses:
           200:
@@ -152,7 +215,9 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: "#/components/schemas/AverageRating"
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/AverageRating"
   /movie/AverageRating/limit/{limit}:
     parameters:
       - name: limit
@@ -162,6 +227,8 @@ paths:
           type: integer
     get:
       summary: Returns average rating score from various of website
+      tags:
+        - rating
       operationId: controller.get_movie_average_rating_limit
       responses:
         200:
@@ -172,7 +239,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AverageRating"
-  /movie/Review/{imdb_id}:
+  /movie/review/{imdb_id}:
     parameters:
       - name: imdb_id
         in: path
@@ -181,6 +248,8 @@ paths:
           type: string
     get:
       summary: Returns reviews from our primary data for specific movie
+      tags:
+        - review
       operationId: controller.get_movie_review
       responses:
         200:
@@ -194,6 +263,8 @@ paths:
   /movie/AverageReview:
     get:
       summary: Returns average review score from our primary data
+      tags:
+        - review
       operationId: controller.get_movies_average_review
       responses:
         200:
@@ -213,6 +284,8 @@ paths:
           type: integer
     get:
       summary: Returns average review score from our primary data
+      tags:
+        - review
       operationId: controller.get_movies_average_review_limit
       responses:
         200:
@@ -223,6 +296,11 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AverageReview"
+          links:
+            averageRating:
+              operationId: controller.get_movies_average_rating_limit
+              parameters:
+                imdbId: $response.body#/imdbId
   /movie/AverageReview/{imbd_id}:
     parameters:
       - name: imbd_id
@@ -232,6 +310,8 @@ paths:
           type: string
     get:
       summary: Returns average review score of specific movie from our primary data
+      tags:
+        - review
       operationId: controller.get_movies_average_review_id
       responses:
         200:
@@ -240,45 +320,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AverageReview"
-  /movie/genres:
-    get:
-      summary: Returns list of genres
-      operationId: controller.get_genres
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Genre"
-  /movie/companies:
-    get:
-      summary: Returns list of companies
-      operationId: controller.get_companies
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ProductionCompany"
-  /movie/casts:
-    get:
-      summary: Return list of persons
-      operationId: controller.get_persons
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Person"
   /movie/year/{year}:
     parameters:
       - name: year
@@ -288,6 +329,8 @@ paths:
           type: integer
     get:
       summary: Return list of movie release on specific year
+      tags:
+        - movie
       operationId: controller.get_movie_year
       responses:
         200:
