@@ -141,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Rating"
+                $ref: "#/components/schemas/AverageRating"
   /movie/Review/{imdb_id}:
     parameters:
       - name: imdb_id
@@ -165,6 +165,25 @@ paths:
     get:
       summary: Returns average review score from our primary data
       operationId: controller.get_movies_average_review
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AverageReview"
+  /movies/AverageReview/{imbd_id}:
+    parameters:
+      - name: imbd_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Returns average review score of specific movie from our primary data
+      operationId: controller.get_movies_average_review_id
       responses:
         200:
           description: Success
@@ -313,12 +332,6 @@ components:
         metacritic:
           type: number
         tmdb:
-          type: number
-        rotten_tomatoes:
-          type: number
-        tv_com:
-          type: number
-        film_affinity:
           type: number
     AverageReview:
       type: object
