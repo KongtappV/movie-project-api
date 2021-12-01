@@ -248,3 +248,23 @@ def get_persons():
             return result
         else:
             abort(404)
+
+
+def get_movie_year(year):
+    with db_cursor() as cs:
+        cs.execute("""
+            SELECT m.id, m.imdb_id, m.title, m.release_date, m.genres
+            FROM movie m
+            WHERE YEAR(m.release_date)=%s
+            """, [year])
+        result = []
+        for i in cs.fetchall():
+            genres = []
+            j = list(eval(i[4]))
+            for k in j:
+                genres.append(models.Genre(k['id'], k['name']))
+            result.append(models.MovieShort(i[0], i[1], i[2], i[3], genres))
+        if result:
+            return result
+        else:
+            abort(404)

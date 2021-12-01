@@ -211,6 +211,25 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Person"
+  /movies/{year}:
+    parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Return list of movie release on specific year
+      operationId: controller.get_movie_year
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieShort"
 
 components:
   schemas:
