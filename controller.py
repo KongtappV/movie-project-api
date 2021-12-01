@@ -63,14 +63,14 @@ def get_movie_details_id(imdb_id):
 def get_movies_latest():
     with db_cursor() as cs:
         cs.execute("""
-            SELECT m.id, m.title, m.release_date, m.genres
+            SELECT m.id, m.imdb_id, m.title, m.release_date, m.genres
             FROM movie m
             ORDER BY m.release_date desc
             LIMIT 30
             """)
         result = [
-            models.MovieShort(id, title, release_date, genre)
-            for id, title, release_date, genre in cs.fetchall()
+            models.MovieShort(id, imdb_id, title, release_date, genre)
+            for id, imdb_id, title, release_date, genre in cs.fetchall()
         ]
         return result
 
