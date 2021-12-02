@@ -20,6 +20,13 @@ API and Questionnaires
 | :---: | :---: | :---: |
 |Python  | 3.7 and above | Use for running APIs.|
 | Pip| 21 or later| Use for installing extra extension for Python|
+|Java|8 or above|for executing jar file|
+|Nodejs|lastest|for executing graphql|
+
+install OpenAPI-to-GraphQL
+```commandline
+npm install -g openapi-to-graphql-cli@2.5.0
+```
 
 ### Data Collection
 
@@ -38,11 +45,11 @@ Before starting the process, Create a virtual environment using these command
 For MacOS and Linux
 
 ```commandline
-python3 -m venv env
+python -m venv env
 ```
 
 ```commandline
-env/bin/activate
+. env/bin/activate
 ```
 
 For Windows<br>
@@ -60,8 +67,13 @@ env\Scripts\activate
 
 Create autogen
 
+For windows
 ```commandline
 java -jar .\openapi\openapi-generator-cli-5.3.0.jar generate -i .\openapi\movie-api.yaml -o autogen -g python-flask
+```
+For mac and linux
+```
+java -jar ./openapi/openapi-generator-cli-5.3.0.jar generate -i ./openapi/movie-api.yaml -o autogen -g python-flask
 ```
 
 download requirements
@@ -78,13 +90,14 @@ python app.py
 
 open another terminal and run
 
+For mac linux and windows
 ```commandline
 openapi-to-graphql --cors -u http://localhost:8080/movie-api/v1 openapi/movie-api.yaml
 ```
 
 swagger ui
 
-```http request
+```
 http://localhost:8080/movie-api/v1/ui/#
 ```
 
