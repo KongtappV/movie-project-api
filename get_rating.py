@@ -7,15 +7,13 @@ API_KEY = ["k_zwp5i4yu",
            "k_p7h75hc0",
            "k_pu9wbz8u",
            "k_q514guzp",
-           "k_2uzksic3"]
-
-
-# "k_21f13b32",
-# "k_33j1rc5f",
-# "k_z218xks1",
-# "k_jme3zq72",
-# "k_x8130z3o",
-# "k_0fquph46"]
+           "k_2uzksic3",
+           "k_21f13b32",
+           "k_33j1rc5f",
+           "k_z218xks1",
+           "k_jme3zq72",
+           "k_x8130z3o",
+           "k_0fquph46"]
 
 
 def get_movie_rating(imdb_id):
