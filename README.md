@@ -67,9 +67,13 @@ env\Scripts\activate
 
 Create autogen
 
-For mac linux and windows
+For windows
 ```commandline
 java -jar .\openapi\openapi-generator-cli-5.3.0.jar generate -i .\openapi\movie-api.yaml -o autogen -g python-flask
+```
+For mac and linux
+```
+java -jar ./openapi/openapi-generator-cli-5.3.0.jar generate -i ./openapi/movie-api.yaml -o autogen -g python-flask
 ```
 
 download requirements
