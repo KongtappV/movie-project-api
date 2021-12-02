@@ -60,6 +60,7 @@ env\Scripts\activate
 
 Create autogen
 
+For mac linux and windows
 ```commandline
 java -jar .\openapi\openapi-generator-cli-5.3.0.jar generate -i .\openapi\movie-api.yaml -o autogen -g python-flask
 ```
@@ -78,13 +79,14 @@ python app.py
 
 open another terminal and run
 
+For mac linux and windows
 ```commandline
 openapi-to-graphql --cors -u http://localhost:8080/movie-api/v1 openapi/movie-api.yaml
 ```
 
 swagger ui
 
-```http request
+```
 http://localhost:8080/movie-api/v1/ui/#
 ```
 
