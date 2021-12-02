@@ -38,7 +38,7 @@ Before starting the process, Create a virtual environment using these command
 For MacOS and Linux
 
 ```commandline
-python3 -m venv env
+python -m venv env
 ```
 
 ```commandline
