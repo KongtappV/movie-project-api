@@ -21,7 +21,8 @@ API and Questionnaires
 |Python  | 3.7 and above | Use for running APIs.|
 | Pip| 21 or later| Use for installing extra extension for Python|
 |Java|8 or above|for executing jar file|
-|Nodejs|lastest|for executing openapi|
+|Nodejs|lastest|for executing graphql|
+
 install OpenAPI-to-GraphQL
 ```commandline
 npm install -g openapi-to-graphql-cli@2.5.0
@@ -48,7 +49,7 @@ python -m venv env
 ```
 
 ```commandline
-env/bin/activate
+. env/bin/activate
 ```
 
 For Windows<br>
