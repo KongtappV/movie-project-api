@@ -1,22 +1,30 @@
-Movie API Server
+Movie Review
 ================
 
-
-### Project description
-Movie project for RESTful API development using OpenAPI and Python. This project is focus on collecting data and compare with apis data
 ### Members
+
 | Members | StudentID | Github |
 | :---: | :---: | :---: |
 | Chonchanok	Chevaisrakul | 6210545459 | [KongtappV](https://github.com/KongtappV) |
-| Narawish 	Sangsiriwut	 | 6210545971 | [NarawishS](https://github.com/NarawishS) |
-| Kongtapp 	Veerawattananun	 | 6210546374 | [boom210232](https://github.com/boom210232) |
+| Narawish 	Sangsiriwut     | 6210545971 | [NarawishS](https://github.com/NarawishS) |
+| Kongtapp 	Veerawattananun     | 6210546374 | [boom210232](https://github.com/boom210232) |
+
+### Project description
+
+this project is for searching movies with specific genre/company/year/cast and reviews scores from various critics from
+API and Questionnaires
+
 ### Project requirement
+
 | Name | Version | Description |
 | :---: | :---: | :---: |
 |Python  | 3.7 and above | Use for running APIs.|
 | Pip| 21 or later| Use for installing extra extension for Python|
+
 ### Data Collection
+
 #### Primary Data
+
 - [Questionnaire provided by Google Form](https://docs.google.com/forms/d/e/1FAIpQLSeowh_YJuN-eWCO2ahBSGyoyLNL8E78wraUG2INRLrgP50RrA/viewform)
 #### Secondary data
 - [The Movie Database(TMDB)](https://www.themoviedb.org/documentation/api)
@@ -24,29 +32,60 @@ Movie project for RESTful API development using OpenAPI and Python. This project
 - [Metacritic API](https://www.internetvideoarchive.com/apis/metacritic-api/)
 
 #### Get started
+
 Before starting the process, Create a virtual environment using these command
 
 For MacOS and Linux
-```
+
+```commandline
 python3 -m venv env
 ```
-For Windows
+
+```commandline
+env/bin/activate
 ```
+
+For Windows<br>
+create environment
+
+```commandline
 python -m venv env
 ```
 
-Make sure that virtual environment are ready and activated.  
-For Linux and MacOS
-```
-. env/bin/activate
-```
+activate env
 
-For Windows
-```
+```commandline
 env\Scripts\activate
 ```
 
-Then type this command:
+Create autogen
+
+```commandline
+java -jar .\openapi\openapi-generator-cli-5.3.0.jar generate -i .\openapi\movie-api.yaml -o autogen -g python-flask
 ```
+
+download requirements
+
+```commandline
 python -m pip install -r requirements.txt
 ```
+
+start app
+
+```commandline
+python app.py
+```
+
+open another terminal and run
+
+```commandline
+openapi-to-graphql --cors -u http://localhost:8080/movie-api/v1 openapi/movie-api.yaml
+```
+
+swagger ui
+
+```http request
+http://localhost:8080/movie-api/v1/ui/#
+```
+
+visualize graph open file `html/avg-review.html` on your preferred browser

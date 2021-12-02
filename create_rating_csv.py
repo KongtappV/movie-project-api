@@ -1,5 +1,4 @@
 import csv
-
 import requests
 
 BASE_URL = "https://imdb-api.com/en"

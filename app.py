@@ -28,7 +28,7 @@ except ModuleNotFoundError:
           " pip install -r requirements.txt")
     exit(1)
 
-from openapi_server import encoder
+from autogen.openapi_server import encoder
 
 
 def main():
