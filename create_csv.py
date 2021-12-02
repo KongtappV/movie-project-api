@@ -4,7 +4,7 @@ from operator import itemgetter
 import requests
 
 base_url = "https://api.themoviedb.org/3"
-api_key = "b5c1777f2517bee552407c1bbcd8dbfa"
+api_key = "GO register yourself"
 movies, companies, persons = [], [], []
 keys = ["id", "title", "genres", "release_date", "imdb_id", "cast", "production_companies"]
 
